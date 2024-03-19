@@ -7,7 +7,7 @@ namespace Lab_10
 {
     public class GeneralizedCollection<T> where T : Auto
     {
-        private Stack<T> autos = new Stack<T>();
+        public Stack<T> autos = new Stack<T>();
         Random random = new Random();
 
         public void AddAuto(T auto)
@@ -156,6 +156,8 @@ namespace Lab_10
             }
         }
 
+
+
         public object Clone()
         {
             GeneralizedCollection<T> clonedCollection = new GeneralizedCollection<T>();
@@ -172,6 +174,26 @@ namespace Lab_10
             List<T> temp = autos.ToList();
             temp.Sort((a1, a2) => a1.Year.CompareTo(a2.Year));
             autos = new Stack<T>(temp);
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            GeneralizedCollection<T> otherCollection = (GeneralizedCollection<T>)obj;
+            if (autos.Count != otherCollection.autos.Count)
+                return false;
+
+            var enumerator1 = autos.GetEnumerator();
+            var enumerator2 = otherCollection.autos.GetEnumerator();
+
+            while (enumerator1.MoveNext() && enumerator2.MoveNext())
+            {
+                if (!enumerator1.Current.Equals(enumerator2.Current))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

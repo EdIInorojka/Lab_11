@@ -6,7 +6,7 @@ namespace Lab_10
 {
     public class UniversalСollection
     {
-        private List<Auto> autos = new List<Auto>();
+        public List<Auto> autos = new List<Auto>();
         Random random = new Random();
 
         public void AddAuto(Auto auto)
@@ -177,6 +177,28 @@ namespace Lab_10
         public void SortByYear()
         {
             autos.Sort((a1, a2) => a1.Year.CompareTo(a2.Year));
+        }
+
+        public Auto GetAutoByIndex(int v)
+        {
+            return autos[v];
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            UniversalСollection otherCollection = (UniversalСollection)obj;
+            if (autos.Count != otherCollection.autos.Count)
+                return false;
+
+            for (int i = 0; i < autos.Count; i++)
+            {
+                if (!autos[i].Equals(otherCollection.autos[i]))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

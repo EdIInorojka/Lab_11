@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab_10", "Lab_10\Lab_10.csproj", "{60F9CCAD-2555-4373-BFD9-17F32844D3DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab_11", "Lab_10\Lab_11.csproj", "{60F9CCAD-2555-4373-BFD9-17F32844D3DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary", "Lab_10ClassLibrary\ClassLibrary.csproj", "{42F8E0DE-0DEE-4426-8C98-7C2F3CE50821}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab_11_UnitTests", "USqlCSharpUdoUnitTestProject1\Lab_11_UnitTests.csproj", "{83943150-46C3-46C2-8D60-EF66B90433AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{42F8E0DE-0DEE-4426-8C98-7C2F3CE50821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42F8E0DE-0DEE-4426-8C98-7C2F3CE50821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42F8E0DE-0DEE-4426-8C98-7C2F3CE50821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83943150-46C3-46C2-8D60-EF66B90433AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83943150-46C3-46C2-8D60-EF66B90433AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83943150-46C3-46C2-8D60-EF66B90433AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83943150-46C3-46C2-8D60-EF66B90433AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
