@@ -60,9 +60,7 @@ namespace ClassLibrary
 
         public override void Init()
         {
-            base.Show();
-
-            Console.WriteLine("Введите информацию о машине:");
+            base.Init();
 
             Console.Write("Количество мест: ");
             seats = int.Parse(Console.ReadLine());
@@ -75,10 +73,8 @@ namespace ClassLibrary
         {
             base.RandomInit();
 
-            Random rand = new Random();
-
-            Seats = rand.Next(1, 8);
-            TopSpeed = rand.Next(120, 400);
+            Seats = rnd.Next(1, 8);
+            TopSpeed = rnd.Next(120, 400);
         }
 
         public override bool Equals(object obj)
@@ -91,6 +87,7 @@ namespace ClassLibrary
         }
 
         public int PassengerCount { get; set; }
+
         public LightCars(IdNumber id, int passengerCount) : base(id)
         {
             PassengerCount = passengerCount;
@@ -103,5 +100,19 @@ namespace ClassLibrary
             return clone;
         }
 
+        // Метод для получения ссылки на объект базового класса Auto
+        public Auto GetBaseAutoObject()
+        {
+            return this;
+        }
+
+        // Свойство для получения ссылки на объект базового класса Auto
+        public Auto BaseAutoObject => this;
+
+        public override string ToString()
+        {
+            return $"Brand: {Brand}, Year: {Year}, Color: {Color}, " +
+                $"Price: {Price}$, Clearance: {Clearance}, Seats: {Seats}, TopSpeed: {TopSpeed}";
+        }
     }
 }

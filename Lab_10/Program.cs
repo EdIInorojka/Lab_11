@@ -1,218 +1,334 @@
 ﻿using System.Linq;
 using System;
 using ClassLibrary;
+using System.Collections.Generic;
 
 namespace Lab_10
 {
     public class Program
     {
+        public static UniversalСollection unCollection = new UniversalСollection();
+        public static GeneralizedCollection<Auto> gnCollection = new GeneralizedCollection<Auto>();
+
         public static void Main(string[] args)
         {
-            Auto dialClock = new Auto();
-            Random random = new Random();
-            Auto[] vehicles = new Auto[20];
-            for (int i = 0; i < vehicles.Length; i++)
+            string answ = "";
+            while (answ != "4")
             {
-                int num = random.Next(4);
-                if (num == 0)
+                Console.WriteLine("Выберите, с какой коллекцией хотите работать:");
+                Console.WriteLine("1 - Универсальная коллекция");
+                Console.WriteLine("2 - Обобщённая коллекция");
+                Console.WriteLine("3 - Задание 3");
+                Console.WriteLine("4 - Закончить работу");
+                answ = Console.ReadLine().Trim();
+                switch (answ)
                 {
-                    vehicles[i] = new LightCars();
-                    vehicles[i].RandomInit();
+                    case "1":
+                        {
+                            StartUniversalLogic();
+                            break;
+                        }
+                    case "2":
+                        {
+                            StartGeneralizedLogic();
+                            break;
+                        }
+                    case"3":
+                        {
+                            Task3();
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
                 }
-                else if (num == 1)
-                {
-                    vehicles[i] = new HeavyCars();
-                    vehicles[i].RandomInit();
-                }
-                else if (num == 2)
-                {
-                    vehicles[i] = new OffRoadCars();
-                    vehicles[i].RandomInit();
-                }
-                else
-                {
-                    vehicles[i] = dialClock;
-                    vehicles[i].RandomInit();
-                }
-            }
-
-            Console.WriteLine("Созданные объекты:");
-            foreach (Auto vehicle in vehicles)
-            {
-                if (vehicle.GetType() == typeof(DialClock))
-                {
-                    vehicle.Show();
-                    Console.WriteLine(DialClock.GetObjectCount());
-                }
-                else
-                {
-                    vehicle.Show();
-                }
-                Console.WriteLine();
-            }
-
-            MostExpensiveOffroad(vehicles);
-            AveragePassengerSpeed(vehicles);
-            TotalCost(vehicles);
-
-            Console.WriteLine();
-            Console.WriteLine($"Количество объектов Passenger: {LightCars.GetObjectCount()}");
-            Console.WriteLine($"Количество объектов Truck: {HeavyCars.GetObjectCount()}");
-            Console.WriteLine($"Количество объектов Off_road: {OffRoadCars.GetObjectCount()}");
-            Console.WriteLine($"Количество объектов DialClock: {DialClock.GetObjectCount()}");
-            Console.WriteLine();
-
-            Console.WriteLine("Элементы массива до сортировки:");
-            foreach (Auto vehicle in vehicles)
-            {
-                vehicle.Show();
-            }
-            Console.WriteLine();
-
-            // сортировка
-            Array.Sort(vehicles);
-
-            Console.WriteLine("Элементы массива после сортировки:");
-            foreach (Auto vehicle in vehicles)
-            {
-                vehicle.Show();
-            }
-
-            // поиск по году
-            int searchYear = 1990;
-
-            int index = Array.BinarySearch(vehicles, new Auto { Year = searchYear });
-
-            if (index >= 0)
-            {
-                Console.WriteLine($"Автомобиль {searchYear} года выпуска, найден в массиве на позиции {index}");
-            }
-            else
-            {
-                Console.WriteLine($"Автомобиль {searchYear} года выпуска, не найден в массиве");
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Массив #2");
-            Console.WriteLine();
-
-            Console.WriteLine("Элементы массива до сортировки:");
-            foreach (Auto vehicle in vehicles)
-            {
-                vehicle.Show();
-            }
-            Console.WriteLine();
-
-            // сортировка
-            Array.Sort(vehicles);
-
-            Console.WriteLine("Элементы массива после сортировки:");
-            foreach (Auto vehicle in vehicles)
-            {
-                vehicle.Show();
-            }
-
-            int searchCost = 50000;
-
-            int index1 = Array.BinarySearch(vehicles, new Auto { Year = searchYear });
-
-            if (index >= 0)
-            {
-                Console.WriteLine($"Автомобиль за {searchCost}$, найден в массиве на позиции {index1}");
-            }
-            else
-            {
-                Console.WriteLine($"Автомобиль за {searchCost}$, не найден в массиве");
-            }
-
-
-            IdNumber id = new IdNumber(123);
-            Auto originalAuto = new Auto(id);
-
-            // Клонирование объекта
-            Auto clonedAuto = (Auto)originalAuto.Clone();
-
-            // Изменение номера у клонированного объекта
-            clonedAuto.id.Number = 456;
-
-            Console.WriteLine("Исходный объект:");
-            Console.WriteLine(originalAuto);
-
-            Console.WriteLine("Клонированный объект (после изменения номера):");
-            Console.WriteLine(clonedAuto);
-
-            // Поверхностное копирование
-            Auto shallowCopyAuto = (Auto)originalAuto.ShallowCopy();
-
-            // Изменение номера у поверхностной копии
-            shallowCopyAuto.id.Number = 789;
-
-            Console.WriteLine("Исходный объект:");
-            Console.WriteLine(originalAuto);
-
-            Console.WriteLine("Поверхностная копия (после изменения номера):");
-            Console.WriteLine(shallowCopyAuto);
-            Console.ReadLine();
-        }
-
-        private static void MostExpensiveOffroad(Auto[] vehicles)
-        {
-            OffRoadCars mostExpensiveOffroad = null;
-            int maxCost = 0;
-
-            foreach (var vehicle in vehicles)
-            {
-                if (vehicle is OffRoadCars && vehicle.Price > maxCost)
-                {
-                    mostExpensiveOffroad = (OffRoadCars)vehicle;
-                    maxCost = vehicle.Price;
-                }
-            }
-
-            if (mostExpensiveOffroad != null)
-            {
-                Console.WriteLine("Самый дорогой внедорожник:");
-                mostExpensiveOffroad.Show();
-            }
-            else
-            {
-                Console.WriteLine("Нет внедорожников в массиве.");
             }
         }
 
-        private static void AveragePassengerSpeed(Auto[] vehicles)
+        public static void StartUniversalLogic()
         {
-            var passengerVehicles = vehicles.Where(v => v is LightCars).Select(v => (LightCars)v);
-            double averageSpeed = 0;
-            int count = 0;
-
-            foreach (var vehicle in passengerVehicles)
+            bool isWorking = true;
+            while(isWorking)
             {
-                averageSpeed += vehicle.TopSpeed;
-                count++;
-            }
-
-            if (count > 0)
-            {
-                averageSpeed /= count;
-                Console.WriteLine($"Средняя скорость легковых автомобилей: {averageSpeed}");
-            }
-            else
-            {
-                Console.WriteLine("В массиве нет легковых автомобилей.");
+                Console.WriteLine("Выберите действие:");
+                Console.WriteLine("1 - Добавить в коллекцию рандомные данные");
+                Console.WriteLine("2 - Добавить элемент в коллекцию");
+                Console.WriteLine("3 - Удалить элемент из коллекции");
+                Console.WriteLine("4 - Вывод коллекции на экран");
+                Console.WriteLine("5 - Вывод кол-ва легковых машин");
+                Console.WriteLine("6 - Вывод только грузовых автомобилей");
+                Console.WriteLine("7 - Проверка, является ли элемент коллекции внедорожником");
+                Console.WriteLine("8 - Клонирование коллекции");
+                Console.WriteLine("9 - Сортировка коллекции по году выпуска");
+                Console.WriteLine("0 - Закончить работу с типом коллекций");
+                string answ = Console.ReadLine().Trim();
+                switch(answ)
+                {
+                    case "1":
+                        {
+                            bool isCorrect = false;
+                            int count = 0;
+                            while (!isCorrect)
+                            {
+                                Console.WriteLine("Введите кол-во объектов");
+                                isCorrect = int.TryParse(Console.ReadLine(), out count);
+                                if (!isCorrect)
+                                {
+                                    Console.WriteLine("Значение неверное");
+                                }
+                            }
+                            unCollection.GenerateAutos(count);
+                            break;
+                        }
+                    case "2":
+                        {
+                            unCollection.AddNewAuto();
+                            Console.WriteLine("Объект добавлен");
+                            break;
+                        }
+                    case "3":
+                        {
+                            bool isCorrect = false;
+                            int index = 0;
+                            while (!isCorrect)
+                            {
+                                Console.WriteLine("Введите индекс для удаления");
+                                isCorrect = int.TryParse(Console.ReadLine(), out index);
+                                if (!isCorrect)
+                                {
+                                    Console.WriteLine("Значение неверное");
+                                }
+                            }
+                            unCollection.RemoveAuto(index);
+                            break;
+                        }
+                    case "4":
+                        {
+                            unCollection.PrintCollection();
+                            break;
+                        }
+                    case "5":
+                        {
+                            int count = unCollection.ReturnCountOfLights();
+                            Console.WriteLine($"Количество легковых машин в коллекции = {count}");
+                            break;
+                        }
+                    case "6":
+                        {
+                            unCollection.PrintOnlyHeavyCars();
+                            break;
+                        }
+                    case "7":
+                        {
+                            bool isCorrect = false;
+                            int index = 0;
+                            while (!isCorrect)
+                            {
+                                Console.WriteLine("Введите индекс для проверки");
+                                isCorrect = int.TryParse(Console.ReadLine(), out index);
+                                if (!isCorrect)
+                                {
+                                    Console.WriteLine("Значение неверное");
+                                }
+                            }
+                            bool a = unCollection.CheckIsOffRoad(index);
+                            if ( a )
+                            {
+                                Console.WriteLine("Автомобиль является внедорожником");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Автомобиль не является внедорожником");
+                            }
+                            break;
+                        }
+                    case "8":
+                        {
+                            UniversalСollection clonedCollection = new UniversalСollection();
+                            clonedCollection = (UniversalСollection)unCollection.Clone();
+                            clonedCollection.PrintCollection();
+                            break;
+                        }
+                    case "9":
+                        {
+                            unCollection.SortByYear();
+                            Console.WriteLine("Коллекция отсортирована");
+                            break;
+                        }
+                    case "0":
+                        {
+                            isWorking = false;  
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
             }
         }
 
-        private static void TotalCost(Auto[] vehicles)
+        private static void StartGeneralizedLogic()
         {
-            int totalCost = 0;
-
-            foreach (var vehicle in vehicles)
+            bool isWorking = true;
+            while (isWorking)
             {
-                totalCost += vehicle.Price;
+                Console.WriteLine("Выберите действие:");
+                Console.WriteLine("1 - Добавить в коллекцию рандомные данные");
+                Console.WriteLine("2 - Добавить элемент в коллекцию");
+                Console.WriteLine("3 - Удалить элемент из коллекции");
+                Console.WriteLine("4 - Вывод коллекции на экран");
+                Console.WriteLine("5 - Вывод кол-ва легковых машин");
+                Console.WriteLine("6 - Вывод только грузовых автомобилей");
+                Console.WriteLine("7 - Проверка, является ли элемент коллекции внедорожником");
+                Console.WriteLine("8 - Клонирование коллекции");
+                Console.WriteLine("9 - Сортировка коллекции по году выпуска");
+                Console.WriteLine("0 - Закончить работу с типом коллекций");
+                string answ = Console.ReadLine().Trim();
+                switch (answ)
+                {
+                    case "1":
+                        {
+                            bool isCorrect = false;
+                            int count = 0;
+                            while (!isCorrect)
+                            {
+                                Console.WriteLine("Введите кол-во объектов");
+                                isCorrect = int.TryParse(Console.ReadLine(), out count);
+                                if (!isCorrect)
+                                {
+                                    Console.WriteLine("Значение неверное");
+                                }
+                            }
+                            gnCollection.GenerateAutos(count);
+                            break;
+                        }
+                    case "2":
+                        {
+                            gnCollection.AddNewAuto();
+                            Console.WriteLine("Объект добавлен");
+                            break;
+                        }
+                    case "3":
+                        {
+                            Console.WriteLine("Удаляется последний элемент");
+                            gnCollection.RemoveAuto();
+                            break;
+                        }
+                    case "4":
+                        {
+                            gnCollection.PrintCollection();
+                            break;
+                        }
+                    case "5":
+                        {
+                            int count = gnCollection.ReturnCountOfLights();
+                            Console.WriteLine($"Количество легковых машин в коллекции = {count}");
+                            break;
+                        }
+                    case "6":
+                        {
+                            gnCollection.PrintOnlyHeavyCars();
+                            break;
+                        }
+                    case "7":
+                        {
+                            Console.WriteLine("Проверяется первый элемент");
+                            bool a = gnCollection.CheckIsOffRoad();
+                            if (a)
+                            {
+                                Console.WriteLine("Автомобиль является внедорожником");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Автомобиль не является внедорожником");
+                            }
+                            break;
+                        }
+                    case "8":
+                        {
+                            GeneralizedCollection<Auto> clonedCollection = new GeneralizedCollection<Auto>();
+                            clonedCollection = (GeneralizedCollection<Auto>)gnCollection.Clone();
+                            clonedCollection.PrintCollection();
+                            break;
+                        }
+                    case "9":
+                        {
+                            gnCollection.SortByYear();
+                            Console.WriteLine("Коллекция отсортирована");
+                            break;
+                        }
+                    case "0":
+                        {
+                            isWorking = false;
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
             }
+        }
 
-            Console.WriteLine($"Суммарная стоимость всех автомобилей: {totalCost}");
+        private static void Task3()
+        {
+            int numberOfElements = 1000; // Число элементов в коллекциях
+
+            // Создаем объект класса TestCollections
+            TestCollections testCollections = new TestCollections(numberOfElements);
+
+            // Создаем элементы для поиска: первый, центральный, последний и отсутствующий
+            LightCars firstElement = testCollections.collection1[0];
+            LightCars middleElement = testCollections.collection1[numberOfElements / 2];
+            LightCars lastElement = testCollections.collection1[numberOfElements - 1];
+            LightCars nonExistentElement = new LightCars(); // Просто создаем новый объект
+
+            // Измеряем время поиска элементов в коллекциях
+            double timeInCollection1First = testCollections.MeasureSearchTimeInCollection1(firstElement).TotalMilliseconds;
+            double timeInCollection1Middle = testCollections.MeasureSearchTimeInCollection1(middleElement).TotalMilliseconds;
+            double timeInCollection1Last = testCollections.MeasureSearchTimeInCollection1(lastElement).TotalMilliseconds;
+            double timeInCollection1NonExistent = testCollections.MeasureSearchTimeInCollection1(nonExistentElement).TotalMilliseconds;
+
+            double timeInCollection2First = testCollections.MeasureSearchTimeInCollection2(firstElement.ToString()).TotalMilliseconds;
+            double timeInCollection2Middle = testCollections.MeasureSearchTimeInCollection2(middleElement.ToString()).TotalMilliseconds;
+            double timeInCollection2Last = testCollections.MeasureSearchTimeInCollection2(lastElement.ToString()).TotalMilliseconds;
+            double timeInCollection2NonExistent = testCollections.MeasureSearchTimeInCollection2(nonExistentElement.ToString()).TotalMilliseconds;
+
+            double timeInCollection3First = testCollections.MeasureSearchTimeInCollection3(firstElement).TotalMilliseconds;
+            double timeInCollection3Middle = testCollections.MeasureSearchTimeInCollection3(middleElement).TotalMilliseconds;
+            double timeInCollection3Last = testCollections.MeasureSearchTimeInCollection3(lastElement).TotalMilliseconds;
+            double timeInCollection3NonExistent = testCollections.MeasureSearchTimeInCollection3(nonExistentElement).TotalMilliseconds;
+
+            double timeInCollection4First = testCollections.MeasureSearchTimeInCollection4(firstElement).TotalMilliseconds;
+            double timeInCollection4Middle = testCollections.MeasureSearchTimeInCollection4(middleElement).TotalMilliseconds;
+            double timeInCollection4Last = testCollections.MeasureSearchTimeInCollection4(lastElement).TotalMilliseconds;
+            double timeInCollection4NonExistent = testCollections.MeasureSearchTimeInCollection4(nonExistentElement).TotalMilliseconds;
+
+            // Выводим результаты
+            Console.WriteLine("Время поиска элементов в коллекциях (в миллисекундах):");
+            Console.WriteLine($"Коллекция 1 (List<LightCat>): " +
+                $"Первый элемент: {timeInCollection1First}, " +
+                $"Средний элемент: {timeInCollection1Middle}, " +
+                $"Последний элемент: {timeInCollection1Last}, " +
+                $"Отсутствующий элемент: {timeInCollection1NonExistent}");
+            Console.WriteLine($"Коллекция 2 (List<string>): " +
+                $"Первый элемент: {timeInCollection2First}, " +
+                $"Средний элемент: {timeInCollection2Middle}, " +
+                $"Последний элемент: {timeInCollection2Last}, " +
+                $"Отсутствующий элемент: {timeInCollection2NonExistent}");
+            Console.WriteLine($"Коллекция 3 (Dictionary<Auto, LightCat>): " +
+                $"Первый элемент: {timeInCollection3First}, " +
+                $"Средний элемент: {timeInCollection3Middle}, " +
+                $"Последний элемент: {timeInCollection3Last}, " +
+                $"Отсутствующий элемент: {timeInCollection3NonExistent}");
+            Console.WriteLine($"Коллекция 4 (Dictionary<string, LightCat>): " +
+                $"Первый элемент: {timeInCollection4First}, " +
+                $"Средний элемент: {timeInCollection4Middle}, " +
+                $"Последний элемент: {timeInCollection4Last}, " +
+                $"Отсутствующий элемент: {timeInCollection4NonExistent}");
+            Console.WriteLine("Время в миллисекундах");
         }
     }
 }

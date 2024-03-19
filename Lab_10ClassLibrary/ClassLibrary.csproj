@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto.cs" />
-    <Compile Include="DialClock.cs" />
     <Compile Include="HeavyCars.cs" />
     <Compile Include="IInit.cs" />
     <Compile Include="LightCars.cs" />

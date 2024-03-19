@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ClassLibrary
 {
-    public class Auto : IInit, IComparable<Auto>
+    public class Auto : IInit, IComparable<Auto>, IComparer<Auto>
     {
         //Автомобиль: бренд, год выпуска, цвет, стоимость, дорожный просвет;
         protected string brand;
@@ -13,6 +14,7 @@ namespace ClassLibrary
         protected static int count = 0;
         public IdNumber id;
 
+        protected static Random rnd = new Random();
 
         public string Brand
         {
@@ -93,6 +95,11 @@ namespace ClassLibrary
             clearance = Cars.Clearance;
         }
 
+        public Auto(IdNumber id)
+        {
+            this.id = new IdNumber(id);
+        }
+
         public static int GetObjectCount()
         {
             return count;
@@ -129,7 +136,6 @@ namespace ClassLibrary
 
         public virtual void RandomInit()
         {
-            Random rnd = new Random();
 
             string[] brands = { "Toyota", "Honda", "Audi", "Mercedes-benz", "BMW", "Porsche" };
             brand = brands[rnd.Next(0, brands.Length)];
@@ -170,9 +176,16 @@ namespace ClassLibrary
             return this.Price.CompareTo(other.Price);
         }
 
-        public Auto(IdNumber id)
+        public int Compare(Auto x, Auto y)
         {
-            this.id = new IdNumber(id);
+            if (x == null && y == null)
+                return 0;
+            if (x == null)
+                return -1;
+            if (y == null)
+                return 1;
+
+            return x.Year.CompareTo(y.Year);
         }
 
         public object ShallowCopy()
@@ -184,51 +197,53 @@ namespace ClassLibrary
         {
             return new Auto(new IdNumber(id.Number));
         }
-        public override string ToString()
+
+        public class IdNumber
         {
-            return $"Auto: {id}";
-        }
-    }
-    public class IdNumber
-    {
-        public int Number
-        {
-            get { return number; }
-            set
+            public int Number
             {
-                if (value < 0)
+                get { return number; }
+                set
                 {
-                    throw new ArgumentException("Номер не должен быть отрицательным.");
+                    if (value < 0)
+                    {
+                        throw new ArgumentException("Номер не должен быть отрицательным.");
+                    }
+                    number = value;
                 }
-                number = value;
+            }
+
+            private int number;
+
+            public IdNumber(int number)
+            {
+                Number = number;
+            }
+
+            // конструктор копирования
+            public IdNumber(IdNumber id)
+            {
+                Number = id.Number;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == null || GetType() != obj.GetType())
+                    return false;
+
+                IdNumber other = (IdNumber)obj;
+                return Number == other.Number;
+            }
+
+            public override string ToString()
+            {
+                return Number.ToString();
             }
         }
 
-        private int number;
-
-        public IdNumber(int number)
+        public virtual string ToString()
         {
-            Number = number;
-        }
-
-        // конструктор копирования
-        public IdNumber(IdNumber id)
-        {
-            Number = id.Number;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            IdNumber other = (IdNumber)obj;
-            return Number == other.Number;
-        }
-
-        public override string ToString()
-        {
-            return Number.ToString();
+            return $"Brand: {Brand}, Year: {Year}, Color: {Color}, Price: {Price}$, Clearance: {Clearance}";
         }
     }
 }

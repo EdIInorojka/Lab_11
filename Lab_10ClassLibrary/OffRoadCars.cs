@@ -45,9 +45,7 @@ namespace ClassLibrary
 
         public override void Init()
         {
-            base.Show();
-
-            Console.WriteLine("Введите информацию о машине:");
+            base.Init();
 
             Console.Write("Есть ли полный привод (true/false): ");
             bool.TryParse(Console.ReadLine(), out fourWD);
@@ -59,8 +57,6 @@ namespace ClassLibrary
         public override void RandomInit()
         {
             base.RandomInit();
-
-            Random rnd = new Random();
 
             fourWD = rnd.Next(2) == 1;
 
@@ -78,10 +74,6 @@ namespace ClassLibrary
         }
 
         public int OffRoadCount { get; set; }
-        public OffRoadCars(IdNumber id, int offRoadCount) : base(id)
-        {
-            OffRoadCount = offRoadCount;
-        }
 
         public override object Clone()
         {

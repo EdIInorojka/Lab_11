@@ -41,9 +41,7 @@ namespace ClassLibrary
 
         public override void Init()
         {
-            base.RandomInit();
-
-            Console.WriteLine("Введите информацию о машине:");
+            base.Init();
 
             Console.Write("Грузоподъемность: ");
             liftingCapacity = int.Parse(Console.ReadLine());
@@ -54,9 +52,7 @@ namespace ClassLibrary
         {
             base.RandomInit();
 
-            Random rand = new Random();
-
-            liftingCapacity = rand.Next(800, 4000);
+            liftingCapacity = rnd.Next(800, 4000);
         }
 
         public override bool Equals(object obj)
@@ -70,10 +66,6 @@ namespace ClassLibrary
 
 
         public int HeavyCarsCount { get; set; }
-        public HeavyCars(IdNumber id, int heavyCarsCount) : base(id)
-        {
-            HeavyCarsCount = heavyCarsCount;
-        }
 
         public override object Clone()
         {
